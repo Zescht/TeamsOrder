@@ -13,15 +13,15 @@
             --bg-color: #0b0c10;
             --panel-bg: #15161a;
             --accent-orange: #ff9600;
+            --accent-green: #00ff00; 
+            --accent-red: #ff0000;   
             --text-white: #ffffff;
             --slot-empty: #1a1a1f;
             
-            /* Fonts */
             --font-ui: 'Teko', sans-serif;
             --font-data: 'Rajdhani', sans-serif;
         }
 
-        /* 1. Layout Safety: Flex Column that fills screen */
         body {
             font-family: var(--font-data);
             background-color: var(--bg-color);
@@ -32,10 +32,10 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* No outer scrollbars */
+            overflow: hidden;
         }
 
-        /* 2. Compact Header */
+        /* --- HEADER --- */
         .header-area {
             height: 100px;
             width: 100%;
@@ -60,54 +60,69 @@
             filter: drop-shadow(0 0 25px rgba(255, 150, 0, 0.6));
         }
 
-        /* 3. Compact Controls */
+        /* --- CONTROLS --- */
         .controls-area {
             width: 100%;
             display: flex;
             justify-content: center;
+            gap: 20px;
             padding: 5px 0 5px 0;
             flex-shrink: 0;
         }
 
-        .undo-btn {
+        .control-btn {
             background: transparent;
-            color: var(--accent-orange);
             border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
             padding: 2px 24px;
-            
             font-family: var(--font-ui);
             font-size: 1.3rem; 
             font-weight: 500;
             letter-spacing: 1px;
             text-transform: uppercase;
-            
             cursor: pointer;
             transition: all 0.2s;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            min-width: 150px;
         }
 
-        .undo-btn:hover:not(:disabled) {
+        .control-btn:hover:not(:disabled) {
             background-color: var(--accent-orange);
             color: #000;
             box-shadow: 0 0 15px rgba(255, 150, 0, 0.5);
         }
 
-        .undo-btn:disabled {
+        .control-btn:disabled {
             border-color: #444;
             color: #444;
             cursor: not-allowed;
             opacity: 0.5;
+            box-shadow: none;
         }
 
-        /* 4. Main Container: Takes ALL remaining space */
+        #submitBtn {
+            border-color: var(--text-white);
+            color: var(--text-white);
+        }
+        #submitBtn:hover:not(:disabled) {
+            background-color: var(--text-white);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        #submitBtn:disabled {
+            border-color: #444;
+            color: #444;
+        }
+
+        /* --- MAIN CONTAINER --- */
         .main-container {
-            flex: 1; /* Fills remaining height */
+            flex: 1;
             display: flex;
             gap: 20px;
             width: 95%;
             max-width: 1300px; 
             align-self: center;
-            padding-bottom: 15px; /* Bottom padding */
+            padding-bottom: 15px;
             box-sizing: border-box;
             min-height: 0; 
         }
@@ -136,28 +151,23 @@
             flex-shrink: 0;
         }
 
-        /* 5. FLEX LISTS */
         .card-pool, .timeline {
             display: flex;
             flex-direction: column;
             gap: 4px;
-            flex: 1; /* Fill the container */
+            flex: 1;
             padding: 8px;
             background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px);
             background-size: 20px 20px;
-            overflow: hidden; /* Hide scrollbars, force fit */
+            overflow: hidden;
         }
 
-        /* Left side specific: Stack from top */
-        .card-pool {
-            justify-content: flex-start; 
-        }
+        .card-pool { justify-content: flex-start; }
 
-        /* Distribute 10 items equally on right side */
         .slot-wrapper {
             display: flex;
             gap: 10px;
-            flex: 1; /* Takes 1/10th of the space */
+            flex: 1;
             min-height: 0; 
         }
 
@@ -183,6 +193,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            transition: all 0.3s;
         }
         
         .slot.drag-over {
@@ -190,7 +201,15 @@
             box-shadow: inset 0 0 15px rgba(255, 150, 0, 0.2);
         }
 
-        /* --- CARDS --- */
+        .slot.correct {
+            border-color: var(--accent-green);
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        .slot.incorrect {
+            border-color: var(--accent-red);
+            box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
         .card {
             width: 100%;
             height: 100%;
@@ -203,9 +222,7 @@
             
             font-family: var(--font-data);
             font-weight: 600;
-            font-size: 1rem; 
             font-size: clamp(0.7rem, 2vh, 1.1rem); 
-            
             text-transform: uppercase;
             letter-spacing: 0.05em;
             
@@ -219,23 +236,104 @@
             text-overflow: ellipsis;
         }
 
-        /* FIXED SIZE FOR POOL ITEMS:
-           flex: 0 (don't grow) 0 (don't shrink) 9% (height basis)
-           9% ensures 10 items fit with a bit of gap space (10 * 9 = 90%)
-        */
-        #pool .card {
-            flex: 0 0 9%; 
-            margin-bottom: 0;
-        }
-        
-        .slot .card {
-            height: 100%;
-            border-left: 4px solid var(--accent-orange);
-            background: linear-gradient(90deg, #333 0%, #222 100%);
-        }
-
+        #pool .card { flex: 0 0 9%; margin-bottom: 0; }
+        .slot .card { height: 100%; border-left: 4px solid var(--accent-orange); background: linear-gradient(90deg, #333 0%, #222 100%); }
         .card:hover { border-left-color: var(--accent-orange); }
         .card.dragging { opacity: 0.6; }
+        .card.locked { cursor: default; }
+
+        /* --- RESULTS MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #15161a;
+            border: 2px solid var(--accent-orange);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 150, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        .modal-title {
+            font-family: var(--font-ui);
+            font-size: 3rem;
+            color: var(--accent-orange);
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .score-display {
+            font-family: var(--font-ui);
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: var(--font-data);
+        }
+
+        .comparison-table th {
+            text-align: left;
+            padding: 10px;
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+        }
+
+        .comparison-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #222;
+            font-size: 1.1rem;
+        }
+
+        .status-cell { width: 30px; text-align: center; }
+        .correct-text { color: var(--accent-green); }
+        .wrong-text { color: var(--accent-red); text-decoration: line-through; opacity: 0.7; }
+        
+        /* Always show actual text in green */
+        .actual-text { color: var(--accent-green); font-weight: bold; }
+
+        .close-modal-btn {
+            background: var(--accent-orange);
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-family: var(--font-ui);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .close-modal-btn:hover { background: #fff; }
 
     </style>
 </head>
@@ -246,7 +344,8 @@
     </div>
 
     <div class="controls-area">
-        <button class="undo-btn" id="undoBtn" onclick="undoLastAction()" disabled>Undo Last Action</button>
+        <button class="control-btn" id="undoBtn" onclick="undoLastAction()" disabled>Undo</button>
+        <button class="control-btn" id="submitBtn" onclick="submitRanking()" disabled>Submit</button>
     </div>
 
     <div class="main-container">
@@ -283,15 +382,71 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-content">
+            <h1 class="modal-title">Results</h1>
+            <div class="score-display" id="scoreDisplay"></div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Your Pick</th>
+                        <th>Correct Pick</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonBody">
+                    </tbody>
+            </table>
+
+            <button class="close-modal-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
 <script>
-    const cards = document.querySelectorAll('.card');
+    const correctOrder = [
+        "Parivison", "Aurora", "Furia", "Mongolz", "3DMax",
+        "M80", "Falcons", "Vitality", "MOUZ", "Faze"
+    ];
+
+    const cardsSelect = document.querySelectorAll('.card');
     const slots = document.querySelectorAll('.slot');
     const pool = document.getElementById('pool');
     const undoBtn = document.getElementById('undoBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const resultModal = document.getElementById('resultModal');
+
     let actionHistory = [];
+    let isLocked = false;
+
+    // --- SHUFFLE ON LOAD ---
+    function shufflePool() {
+        // Get current cards in pool as an array
+        let poolCards = Array.from(pool.querySelectorAll('.card'));
+        
+        // Fisher-Yates shuffle algorithm
+        for (let i = poolCards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [poolCards[i], poolCards[j]] = [poolCards[j], poolCards[i]];
+        }
+
+        // Re-append them to the pool in the new random order
+        poolCards.forEach(card => {
+            pool.appendChild(card);
+        });
+    }
+
+    // Run shuffle immediately
+    shufflePool();
+
+
+    // --- Drag & Drop Logic ---
+    // We need to re-select cards after shuffle to be safe, though appendChild usually preserves events.
+    const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
-        card.addEventListener('dragstart', function() {
+        card.addEventListener('dragstart', function(e) {
+            if(isLocked) { e.preventDefault(); return; }
             this.classList.add('dragging');
             draggedCard = this;
             originSlot = this.parentNode;
@@ -306,6 +461,7 @@
     const allDropZones = [...slots, pool];
     allDropZones.forEach(zone => {
         zone.addEventListener('dragover', e => {
+            if(isLocked) return;
             e.preventDefault();
             if(zone.classList.contains('slot')) zone.classList.add('drag-over');
         });
@@ -319,6 +475,7 @@
     let originSlot = null;
 
     function dragDrop() {
+        if(isLocked) return;
         this.classList.remove('drag-over');
         if (!draggedCard || this === originSlot) return;
 
@@ -343,10 +500,13 @@
             actionHistory.push(action);
             undoBtn.disabled = false;
         }
+
+        checkCompletion();
     }
 
+    // --- Undo Logic ---
     function undoLastAction() {
-        if (actionHistory.length === 0) return;
+        if (actionHistory.length === 0 || isLocked) return;
         const lastAction = actionHistory.pop();
         if (lastAction.type === 'move') {
             lastAction.from.appendChild(lastAction.card);
@@ -355,6 +515,68 @@
             lastAction.to.appendChild(lastAction.cardInSlot);
         }
         if (actionHistory.length === 0) undoBtn.disabled = true;
+        
+        checkCompletion();
+    }
+
+    // --- Completion Check ---
+    function checkCompletion() {
+        let filledSlots = 0;
+        slots.forEach(slot => {
+            if(slot.children.length > 0) filledSlots++;
+        });
+        submitBtn.disabled = (filledSlots !== 10);
+    }
+
+    // --- Submit & Validation Logic ---
+    function submitRanking() {
+        if(isLocked) return;
+
+        isLocked = true;
+        undoBtn.disabled = true;
+        submitBtn.disabled = true;
+        
+        cards.forEach(card => {
+            card.draggable = false;
+            card.classList.add('locked');
+        });
+
+        let score = 0;
+        let comparisonHTML = "";
+
+        slots.forEach((slot, index) => {
+            const userCard = slot.children[0];
+            const userText = userCard ? userCard.innerText.trim() : "";
+            const correctText = correctOrder[index];
+            const rank = index + 1;
+            
+            // Case-Insensitive Comparison
+            let isCorrect = (userText.toUpperCase() === correctText.toUpperCase());
+
+            if(isCorrect) {
+                slot.classList.add('correct');
+                score++;
+            } else {
+                slot.classList.add('incorrect');
+            }
+
+            // Always show the correct name in the right column
+            comparisonHTML += `
+                <tr>
+                    <td>${rank}</td>
+                    <td class="${isCorrect ? 'correct-text' : 'wrong-text'}">${userText}</td>
+                    <td><span class="actual-text">${correctText}</span></td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('scoreDisplay').innerText = `You scored: ${score} / 10`;
+        document.getElementById('comparisonBody').innerHTML = comparisonHTML;
+        resultModal.classList.add('active');
+    }
+
+    function closeModal() {
+        resultModal.classList.remove('active');
     }
 </script>
 
