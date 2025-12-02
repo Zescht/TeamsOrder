@@ -139,7 +139,7 @@
             min-height: 0; 
         }
 
-        h2 {
+        h2.standard-header {
             margin: 5px 0;
             color: var(--text-white);
             text-align: center;
@@ -149,6 +149,29 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
             flex-shrink: 0;
+        }
+
+        /* --- ALIGNED HEADER FOR RIGHT SIDE --- */
+        .header-aligned {
+            display: flex;
+            gap: 10px;
+            padding: 0 8px;
+            align-items: center;
+            margin: 5px 0;
+            flex-shrink: 0;
+        }
+        
+        .header-spacer { width: 40px; flex-shrink: 0; }
+        .header-text {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-ui);
+            font-size: 1.5rem; 
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-white);
+            margin: 0;
         }
 
         .card-pool, .timeline {
@@ -196,19 +219,9 @@
             transition: all 0.3s;
         }
         
-        .slot.drag-over {
-            border-color: var(--accent-orange);
-            box-shadow: inset 0 0 15px rgba(255, 150, 0, 0.2);
-        }
-
-        .slot.correct {
-            border-color: var(--accent-green);
-            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-        .slot.incorrect {
-            border-color: var(--accent-red);
-            box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
-        }
+        .slot.drag-over { border-color: var(--accent-orange); box-shadow: inset 0 0 15px rgba(255, 150, 0, 0.2); }
+        .slot.correct { border-color: var(--accent-green); box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3); }
+        .slot.incorrect { border-color: var(--accent-red); box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3); }
 
         .card {
             width: 100%;
@@ -244,64 +257,43 @@
 
         /* --- RESULTS MODAL --- */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content {
             background: #15161a;
             border: 2px solid var(--accent-orange);
-            padding: 30px;
-            width: 90%;
-            max-width: 600px;
+            padding: 30px; width: 90%; max-width: 600px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 150, 0, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s;
-            max-height: 90vh;
-            overflow-y: auto;
+            transform: scale(0.9); transition: transform 0.3s;
+            max-height: 90vh; overflow-y: auto;
         }
-        
         .modal-overlay.active .modal-content { transform: scale(1); }
 
         .modal-title {
             font-family: var(--font-ui);
-            font-size: 3rem;
-            color: var(--accent-orange);
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
+            font-size: 3rem; color: var(--accent-orange); margin: 0 0 10px 0; text-transform: uppercase;
         }
-
         .score-display {
-            font-family: var(--font-ui);
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 20px;
+            font-family: var(--font-ui); font-size: 1.5rem; color: #fff; margin-bottom: 20px;
         }
 
+        /* --- TABLE ADJUSTMENT --- */
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
             font-family: var(--font-data);
+            table-layout: fixed; /* Ensures equal width columns */
         }
 
         .comparison-table th {
-            text-align: left;
+            text-align: center; /* Center headers to match content */
             padding: 10px;
             color: #888;
             font-size: 0.9rem;
@@ -313,25 +305,24 @@
             padding: 8px 10px;
             border-bottom: 1px solid #222;
             font-size: 1.1rem;
+            text-align: center; /* Center content */
+            vertical-align: middle;
         }
 
-        .status-cell { width: 30px; text-align: center; }
+        /* Set narrow width for Rank # column */
+        .comparison-table th:first-child,
+        .comparison-table td:first-child {
+            width: 40px;
+        }
+
         .correct-text { color: var(--accent-green); }
         .wrong-text { color: var(--accent-red); text-decoration: line-through; opacity: 0.7; }
-        
-        /* Always show actual text in green */
         .actual-text { color: var(--accent-green); font-weight: bold; }
 
         .close-modal-btn {
-            background: var(--accent-orange);
-            color: #000;
-            border: none;
-            padding: 10px 30px;
-            font-family: var(--font-ui);
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            font-weight: bold;
+            background: var(--accent-orange); color: #000; border: none; padding: 10px 30px;
+            font-family: var(--font-ui); font-size: 1.2rem; text-transform: uppercase;
+            cursor: pointer; font-weight: bold;
         }
         .close-modal-btn:hover { background: #fff; }
 
@@ -350,23 +341,27 @@
 
     <div class="main-container">
         <div class="pool-container">
-            <h2>Teams</h2>
+            <h2 class="standard-header">Teams</h2>
             <div id="pool" class="card-pool">
-                <div class="card" draggable="true">Parivison</div>
-                <div class="card" draggable="true">Aurora</div>
-                <div class="card" draggable="true">Furia</div>
-                <div class="card" draggable="true">The Mongolz</div>
-                <div class="card" draggable="true">3DMax</div>
-                <div class="card" draggable="true">M80</div>
-                <div class="card" draggable="true">Falcons</div>
-                <div class="card" draggable="true">Vitality</div>
                 <div class="card" draggable="true">MOUZ</div>
+                <div class="card" draggable="true">Falcons</div>
+                <div class="card" draggable="true">The Mongolz</div>
+                <div class="card" draggable="true">Parivison</div>
                 <div class="card" draggable="true">Faze</div>
+                <div class="card" draggable="true">Vitality</div>
+                <div class="card" draggable="true">Aurora</div>
+                <div class="card" draggable="true">3DMax</div>
+                <div class="card" draggable="true">Furia</div>
+                <div class="card" draggable="true">M80</div>
             </div>
         </div>
 
         <div class="ranking-container">
-            <h2>Ranking</h2>
+            <div class="header-aligned">
+                <div class="header-spacer"></div>
+                <h2 class="header-text">MAPS PLAYED IN 2025 (highest to lowest)</h2>
+            </div>
+            
             <div class="timeline">
                 <div class="slot-wrapper"><div class="rank-number">1</div><div class="slot"></div></div>
                 <div class="slot-wrapper"><div class="rank-number">2</div><div class="slot"></div></div>
@@ -419,29 +414,7 @@
     let actionHistory = [];
     let isLocked = false;
 
-    // --- SHUFFLE ON LOAD ---
-    function shufflePool() {
-        // Get current cards in pool as an array
-        let poolCards = Array.from(pool.querySelectorAll('.card'));
-        
-        // Fisher-Yates shuffle algorithm
-        for (let i = poolCards.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [poolCards[i], poolCards[j]] = [poolCards[j], poolCards[i]];
-        }
-
-        // Re-append them to the pool in the new random order
-        poolCards.forEach(card => {
-            pool.appendChild(card);
-        });
-    }
-
-    // Run shuffle immediately
-    shufflePool();
-
-
     // --- Drag & Drop Logic ---
-    // We need to re-select cards after shuffle to be safe, though appendChild usually preserves events.
     const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
@@ -560,12 +533,12 @@
                 slot.classList.add('incorrect');
             }
 
-            // Always show the correct name in the right column
+            // Solution in FULL CAPS
             comparisonHTML += `
                 <tr>
                     <td>${rank}</td>
                     <td class="${isCorrect ? 'correct-text' : 'wrong-text'}">${userText}</td>
-                    <td><span class="actual-text">${correctText}</span></td>
+                    <td><span class="actual-text">${correctText.toUpperCase()}</span></td>
                 </tr>
             `;
         });
